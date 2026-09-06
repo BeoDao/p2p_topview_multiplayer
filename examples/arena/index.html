@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Arena — p2p top-view multiplayer</title>
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <canvas id="stage"></canvas>
+  <div id="join">
+    <h1>Arena</h1>
+    <p>Open this page in another tab (or on another machine) with the same room to play together.</p>
+    <label>Name <input id="name" maxlength="16" placeholder="player" /></label>
+    <label>Room <input id="room" maxlength="24" value="lobby" /></label>
+    <button id="go">Join</button>
+  </div>
+  <script type="module">
+    import { TopViewGame } from '/src/framework.js';
+    import arena from './game.js';
+
+    const params = new URLSearchParams(location.search);
+    const nameInput = document.getElementById('name');
+    const roomInput = document.getElementById('room');
+    nameInput.value = params.get('name') ?? `player${Math.floor(Math.random() * 100)}`;
+    roomInput.value = params.get('room') ?? 'lobby';
+
+    document.getElementById('go').onclick = () => {
+      document.getElementById('join').remove();
+      const game = new TopViewGame(arena, {
+        canvas: document.getElementById('stage'),
+        room: roomInput.value || 'lobby',
+        name: nameInput.value || 'player',
+      });
+      game.on('host', (hostId, isHost) => console.log('host is now', hostId, isHost ? '(us)' : ''));
+      game.on('event', (name, data) => console.log('event', name, data));
+      game.connect();
+      window.game = game; // handy for poking at state in the console
+    };
+  </script>
+</body>
+</html>
