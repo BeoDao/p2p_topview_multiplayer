@@ -1,0 +1,45 @@
+{
+  "name": "cyclical-value-terminal",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Cyclical Value Backtest & Solana RWA Terminal — normalized-earnings, point-in-time cyclical screener and backtester.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -b --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "validate:data": "vite-node scripts/validate-data.ts",
+    "ingest:sec": "node scripts/ingest-sec.mjs",
+    "ingest:dart": "node scripts/ingest-dart.mjs",
+    "ingest:edinet": "node scripts/ingest-edinet.mjs",
+    "import:prices": "node scripts/import-prices.mjs"
+  },
+  "dependencies": {
+    "html-to-image": "^1.11.13",
+    "lucide-react": "^1.52.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "recharts": "^3.10.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "@types/node": "^22.20.5",
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-react": "^4.7.0",
+    "autoprefixer": "^10.6.1",
+    "eslint": "^9.39.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.5.7",
+    "globals": "^17.13.0",
+    "postcss": "^8.5.28",
+    "tailwindcss": "^3.4.19",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.71.0",
+    "vite": "^6.4.3",
+    "vitest": "^3.2.7"
+  }
+}
