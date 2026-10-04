@@ -128,9 +128,3 @@ test/              유닛 테스트
 ## 라이선스
 
 MIT
-
-## Cyclical Value Backtest & Solana RWA Terminal
-
-A separate, self-contained web app lives in [`cyclical-terminal/`](cyclical-terminal/README.md). It is a
-normalized-earnings, point-in-time cyclical-stock screener and backtester (US / KOSPI / TSE) with Solana RWA token
-mapping. See its README for setup and data-provenance notes.
