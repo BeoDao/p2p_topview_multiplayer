@@ -1,0 +1,26 @@
+{
+  "ticker": "7011",
+  "source": "JPX / J-Quants daily stock prices as distributed for the Kaggle 'JPX Tokyo Stock Exchange Prediction' competition (train_files/stock_prices.csv, 2017-01-04..2021-12-03; Close = unadjusted TSE close, AdjustmentFactor column ignored), mirrored in Git LFS at https://media.githubusercontent.com/media/1on1pt/JPX_Tokyo_Stock_Exchange_Prediction/main/train_files/stock_prices.csv (LFS pointer https://raw.githubusercontent.com/1on1pt/JPX_Tokyo_Stock_Exchange_Prediction/main/train_files/stock_prices.csv); only the quarter-end byte ranges were downloaded (HTTP Range), rows SecuritiesCode=7011. Value = last TSE session close on/before each calendar quarter end. Split basis 2025-12-31: raw as-is before ex-date 2017-09-27 (1:10 consolidation 2017-10-01 and 10:1 split 2024-04-01 cancel), raw /10 from 2017-09-27. No independent second mirror found; only the transcribed series was compared.",
+  "prices": {
+    "2017-03-31": 446.6,
+    "2017-06-30": 459.8,
+    "2017-09-30": 444.9,
+    "2017-12-31": 421.0,
+    "2018-03-31": 407.4,
+    "2018-06-30": 403.1,
+    "2018-09-30": 438.7,
+    "2018-12-31": 395.6,
+    "2019-03-31": 459.8,
+    "2019-06-30": 469.1,
+    "2019-09-30": 423.2,
+    "2019-12-31": 424.8,
+    "2020-03-31": 273.25,
+    "2020-06-30": 254.3,
+    "2020-09-30": 233.05,
+    "2020-12-31": 315.6,
+    "2021-03-31": 344.9,
+    "2021-06-30": 326.9,
+    "2021-09-30": 302.4
+  },
+  "ingestedAt": "2026-10-04T09:03:47Z"
+}

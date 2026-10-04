@@ -1,0 +1,18 @@
+{
+  "ticker": "BHP",
+  "source": "pystock-data (eliangcs; Yahoo Finance daily prices crawled each morning; raw unadjusted 'close' column) https://raw.githubusercontent.com/eliangcs/pystock-data/master/2015/0001_initial.tar.gz .. 0003_initial.tar.gz (2014-12-31) and daily archives https://raw.githubusercontent.com/eliangcs/pystock-data/master/{2015/20150401,2015/20150701,2015/20151001,2016/20160104,2016/20160401,2016/20160701,2016/20161003,2017/20170102}.tar.gz (prices.csv); primary for 2017-03-31/2017-06-30 and cross-check: https://raw.githubusercontent.com/yumoxu/stocknet-dataset/master/price/raw/BHP.csv (Yahoo 'Close', 2012-09-04..2017-09-01). Value = last trading-day close on/before each calendar quarter end. ADR/NYSE listing; no public mirror found for later years, so coverage stops where the mirrors stop. Yahoo 'Close' is not adjusted for the 2015 South32 demerger (consistent with the not-dividend-adjusted basis).",
+  "prices": {
+    "2014-12-31": 47.32,
+    "2015-03-31": 46.47,
+    "2015-06-30": 40.71,
+    "2015-09-30": 31.62,
+    "2015-12-31": 25.76,
+    "2016-03-31": 25.9,
+    "2016-06-30": 28.56,
+    "2016-09-30": 34.65,
+    "2016-12-31": 35.78,
+    "2017-03-31": 36.32,
+    "2017-06-30": 35.59
+  },
+  "ingestedAt": "2026-10-04T09:03:47Z"
+}

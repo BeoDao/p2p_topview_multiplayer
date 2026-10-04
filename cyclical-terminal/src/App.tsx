@@ -26,6 +26,10 @@ const DATA_END = COMPANIES.reduce((m, c) => {
   const last = Object.keys(c.data.prices).sort().at(-1) ?? '';
   return last > m ? last : m;
 }, '');
+const PRICE_COVERAGE = Math.round(
+  (100 * COMPANIES.reduce((s, c) => s + c.ingestedPriceKeys, 0)) /
+    Math.max(1, COMPANIES.reduce((s, c) => s + Object.keys(c.data.prices).length, 0)),
+);
 const SCREEN_DATES = quarterEnds(2015, 2026).filter((d) => d <= DATA_END);
 
 export default function App() {
@@ -92,7 +96,9 @@ export default function App() {
         </div>
         <div className="flex items-center gap-2">
           <Badge tone="blue"><ShieldCheck size={11} /> PIT: {config.basis === 'filing' ? 'statutory filing date' : 'earnings release'}</Badge>
-          <Badge tone="amber" title="See the Data Provenance tab">Data through {DATA_END} · transcribed</Badge>
+          <Badge tone="amber" title="See the Data Provenance tab">
+            Data through {DATA_END} · fundamentals transcribed · {PRICE_COVERAGE}% of closes machine-sourced
+          </Badge>
         </div>
       </header>
 

@@ -28,12 +28,14 @@ export function Provenance({ companies }: { companies: Company[] }) {
     let filings = 0;
     let ingested = 0;
     let prices = 0;
+    let ingestedPrices = 0;
     for (const c of companies) {
+      ingestedPrices += c.ingestedPriceKeys;
       filings += c.data.filings.length;
       ingested += Object.values(c.filingVerification).filter((v) => v === 'ingested').length;
       prices += Object.keys(c.data.prices).length;
     }
-    return { filings, ingested, prices };
+    return { filings, ingested, prices, ingestedPrices };
   }, [companies]);
 
   return (
@@ -59,7 +61,7 @@ export function Provenance({ companies }: { companies: Company[] }) {
           <span>{totals.filings} annual filings</span>
           <span>{totals.ingested} ingested</span>
           <span>{totals.filings - totals.ingested} transcribed</span>
-          <span>{totals.prices} quarter-end closes</span>
+          <span>{totals.prices} quarter-end closes ({totals.ingestedPrices} machine-sourced)</span>
         </div>
       </div>
 
@@ -91,12 +93,21 @@ export function Provenance({ companies }: { companies: Company[] }) {
                 <Badge tone="blue">{c.regulator} {c.regulator === 'SEC' ? 'CIK' : c.regulator === 'DART' ? 'corp_code' : 'code'} {c.regulatorId}</Badge>
                 <Badge tone={confTone(c.data.confidence.fundamentals)}>fundamentals: {c.data.confidence.fundamentals}</Badge>
                 <Badge tone={confTone(c.data.confidence.prices)}>prices: {c.data.confidence.prices}</Badge>
-                {c.ingestedPriceKeys > 0 && <Badge tone="emerald">{c.ingestedPriceKeys} ingested prices</Badge>}
+                {c.ingestedPriceKeys > 0 && (
+                  <Badge tone="emerald">
+                    {c.ingestedPriceKeys}/{Object.keys(c.data.prices).length} closes machine-sourced
+                  </Badge>
+                )}
                 <a href={regulatorLink(c)} target="_blank" rel="noreferrer" className="ml-auto flex items-center gap-1 text-[11px] text-slate-400 hover:text-blue-300">
                   regulator filings <ExternalLink size={10} />
                 </a>
               </div>
               {c.data.notes && <div className="border-b border-slate-800 px-2 py-1 text-[10px] text-slate-500">{c.data.notes}</div>}
+              {c.ingestedSources.map((src) => (
+                <div key={src} className="break-all border-b border-slate-800 px-2 py-1 text-[10px] text-emerald-300/70">
+                  Ingested source: {src}
+                </div>
+              ))}
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>

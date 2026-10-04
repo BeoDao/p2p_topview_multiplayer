@@ -24,6 +24,8 @@ export interface Company extends CompanyMeta {
   /** Per-filing provenance after merging ingested overrides. */
   filingVerification: Record<string, CompanyDataset['verification']>;
   ingestedPriceKeys: number;
+  /** `source` strings of every ingested file that contributed to this company. */
+  ingestedSources: string[];
 }
 
 const REQUIRED_FIELDS: (keyof AnnualFiling)[] = [
@@ -36,13 +38,14 @@ function mergeIngested(base: CompanyDataset): {
   data: CompanyDataset;
   filingVerification: Record<string, CompanyDataset['verification']>;
   ingestedPriceKeys: number;
+  ingestedSources: string[];
 } {
   const filingVerification: Record<string, CompanyDataset['verification']> = {};
   for (const f of base.filings) filingVerification[f.periodEnd] = base.verification;
   const overrides = Object.values(ingestedModules)
     .map((m) => m.default)
     .filter((f) => f.ticker === base.ticker);
-  if (overrides.length === 0) return { data: base, filingVerification, ingestedPriceKeys: 0 };
+  if (overrides.length === 0) return { data: base, filingVerification, ingestedPriceKeys: 0, ingestedSources: [] };
 
   const byPeriod = new Map(base.filings.map((f) => [f.periodEnd, f]));
   const prices: PriceSeries = { ...base.prices };
@@ -61,7 +64,8 @@ function mergeIngested(base: CompanyDataset): {
     }
   }
   const filings = [...byPeriod.values()].sort((a, b) => a.periodEnd.localeCompare(b.periodEnd));
-  return { data: { ...base, filings, prices }, filingVerification, ingestedPriceKeys };
+  const ingestedSources = overrides.flatMap((o) => (o.source ? [o.source] : []));
+  return { data: { ...base, filings, prices }, filingVerification, ingestedPriceKeys, ingestedSources };
 }
 
 const ALL_DATASETS: CompanyDataset[] = [
