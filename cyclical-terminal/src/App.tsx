@@ -1,4 +1,4 @@
-import { BarChart3, Database, History, Search, ShieldCheck, Wallet } from 'lucide-react';
+import { BarChart3, Coins, Database, History, Search, ShieldCheck, Wallet } from 'lucide-react';
 import { useDeferredValue, useMemo, useState } from 'react';
 import { COMPANIES, COMPANY_BY_TICKER } from './data';
 import { runBacktest, universeFilter, type BacktestConfig, type BacktestResult } from './engine/backtest';
@@ -12,6 +12,7 @@ import { CompanyDetail } from './components/CompanyDetail';
 import { KpiCards } from './components/KpiCards';
 import { PresetBar } from './components/PresetBar';
 import { Provenance } from './components/Provenance';
+import { RwaBacktestView } from './components/RwaBacktestView';
 import { RwaPanel } from './components/RwaPanel';
 import { Screener } from './components/Screener';
 import { TimeMachineBar } from './components/TimeMachineBar';
@@ -19,7 +20,7 @@ import { TradeExplorer } from './components/TradeExplorer';
 import { UniverseSwitcher } from './components/UniverseSwitcher';
 import { Badge, Modal, Tabs } from './components/ui';
 
-type Tab = 'backtest' | 'screener' | 'trades' | 'rwa' | 'provenance';
+type Tab = 'backtest' | 'screener' | 'trades' | 'rwabt' | 'rwa' | 'provenance';
 
 /** Last quarter-end covered by bundled/ingested prices. */
 const DATA_END = COMPANIES.reduce((m, c) => {
@@ -113,7 +114,8 @@ export default function App() {
             { id: 'backtest', label: <><BarChart3 size={13} /> Backtest</> },
             { id: 'screener', label: <><Search size={13} /> PIT Screener</> },
             { id: 'trades', label: <><History size={13} /> Trade Explorer {result ? `(${result.trades.length})` : ''}</> },
-            { id: 'rwa', label: <><Wallet size={13} /> Solana RWA</> },
+            { id: 'rwabt', label: <><Coins size={13} /> RWA Token Backtest</> },
+            { id: 'rwa', label: <><Wallet size={13} /> Solana RWA Live</> },
             { id: 'provenance', label: <><Database size={13} /> Data Provenance</> },
           ]}
         />
@@ -133,6 +135,7 @@ export default function App() {
         </div>
       )}
       {tab === 'trades' && <TradeExplorer trades={result?.trades ?? []} companies={COMPANY_BY_TICKER} />}
+      {tab === 'rwabt' && <RwaBacktestView />}
       {tab === 'rwa' && <RwaPanel rows={rwaRows} />}
       {tab === 'provenance' && <Provenance companies={COMPANIES} />}
 

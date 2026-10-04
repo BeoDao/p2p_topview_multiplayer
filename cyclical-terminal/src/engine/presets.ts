@@ -49,9 +49,9 @@ export const PRESETS: Preset[] = [
   {
     id: 'rwa',
     emoji: '⚡',
-    name: 'Solana On-chain RWA Alpha',
-    nameKo: 'Solana 온체인 RWA 고수익 알파',
-    description: '15 RWA-eligible names, score-weighted, 1.5x leverage, Solana DEX fee + slippage applied to every leg.',
+    name: 'RWA-mapped names · stock-price proxy',
+    nameKo: 'Solana RWA 매핑 종목 (주식가격 대용)',
+    description: 'Long history (2018–2025) on the RWA-mapped names using LISTED-SHARE prices with Solana DEX costs overlaid. For actual token prices use the RWA Token Backtest tab.',
     config: {
       ...BASE_CONFIG,
       universe: 'RWA',

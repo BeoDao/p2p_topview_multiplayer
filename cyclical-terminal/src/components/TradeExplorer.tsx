@@ -55,7 +55,7 @@ export function TradeExplorer({ trades, companies }: { trades: Trade[]; companie
                       <div className="flex items-center gap-1.5">
                         <CompanyLogo meta={c} size={20} />
                         <span className="font-semibold text-slate-100">{t.ticker}</span>
-                        {t.syntheticRwa && <Badge tone="purple" title="Pre-launch synthetic RWA proxy">synthetic</Badge>}
+                        {t.rwaPriceProxy && <Badge tone="purple" title="Priced off the listed share, DEX costs applied — not a token price">stock-price proxy</Badge>}
                       </div>
                     </td>
                     <td className="td num">{quarterLabel(t.entry.date)}</td>

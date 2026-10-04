@@ -26,12 +26,15 @@ npm run build
 | Commodity / freight / index / FX drivers, benchmarks | Mostly computed from public mirrors of the original publishers (EIA, World Bank Pink Sheet, Baltic Exchange, SSE, FRED, ISM, Fed H.10, …), with exact URLs in `src/data/marketIndicators.ts`. HRC_US, NEWBUILD, ETHYLENE_SPREAD and WFE are labelled *recalled, no machine source*. |
 | Industry through-cycle margins / ROIC | Model assumptions, shown as such in the UI. |
 | Solana RWA mint / liquidity / price | Fetched live from the DexScreener public API at runtime. No address is hard-coded. |
+| Tokenized-equity daily bars (RWA Token Backtest) | **None bundled yet.** DexScreener and GeckoTerminal are blocked in the build sandbox, so run `npm run ingest:rwa` on a machine with internet access. Each symbol is then either resolved on-chain (mint and daily bars) or recorded as *not listed*. Only NVDAx, TSLAx, CVXx and XOMx are confirmed by public sources; the other mapped tokens are *unverified* and may not exist. |
+| Underlying daily closes 2024-07 → 2026-07-30 | Machine-sourced (Yahoo split-adjusted close via a public mirror) for 12 of the 15 RWA underlyings plus XOM, SPY and QQQ. VALE, CCJ, RIO and BHP are missing. |
 
 The bundled data ends at **2025-12-31**. 2026 is selectable in the UI but disabled until newer data is ingested.
 
 ### Replacing transcribed data with regulator data
 
 ```bash
+npm run ingest:rwa                                                 # Solana token mints + daily on-chain bars + underlying daily closes
 SEC_USER_AGENT="Your Name you@example.com" npm run ingest:sec      # SEC companyfacts XBRL (no key)
 DART_API_KEY=...   npm run ingest:dart                             # OpenDART fnlttSinglAcntAll (CFS)
 EDINET_API_KEY=... npm run ingest:edinet                           # EDINET API v2, 有価証券報告書 CSV
@@ -50,6 +53,26 @@ the price series (`scripts/lib/common.mjs`).
 
 Importing monthly or weekly closes enables the monthly and weekly rebalance options. The bundled set is quarterly,
 and the engine refuses to fake finer grids.
+
+## RWA Token Backtest (`src/engine/rwaBacktest.ts`)
+
+A separate **daily** engine for Solana tokenized equities. It never mixes price sources within a run:
+
+* **On-chain token prices**: uses the token's own daily closes (volume-weighted across its Solana pools).
+  * Only tokens actually resolved on-chain are tradeable.
+  * Costs are the DEX fee + base slippage + √-impact, sized against the trailing 20-day on-chain USD volume.
+  * Each day's fills are capped at a set share of that volume; exits that exceed the cap spill over to later days.
+  * Entries are skipped when the token trades above the listed share by more than the set premium (default 2%).
+  * Premium/discount is charted for each token.
+* **Stock-price comparison**: the same signals run on the listed shares' daily closes over the token era (from
+  2025-06-30). This mode is labelled on screen as **not** a token result.
+
+The run window always starts at the xStocks launch (2025-06-30), because no tokenized equity traded before that.
+Signals are point-in-time from filings, so in 2026 the engine uses FY2024 reports until FY2025 filings are ingested
+(`npm run ingest:sec`).
+
+The quarterly engine's "on-chain" switch is only a **cost overlay** on listed-share prices. Its RWA legs are labelled
+*stock-price proxy*.
 
 ## Engines (`src/engine`)
 
@@ -93,6 +116,6 @@ added back at load time, so every engine works with an EBIT-equivalent figure.
 * Annual fundamentals only: no quarterly TTM data in the bundled set, although the schema and SEC ingestion support it.
 * Prices are price-return only (dividends excluded). Equity is marked quarterly, so the reported maximum drawdown is
   smaller than daily marking would show.
-* Tokenized-equity programmes on Solana launched mid-2025. Earlier RWA legs use the underlying equity as a synthetic
-  proxy and are flagged as such in the trade list.
+* Tokenized-equity programmes on Solana launched mid-2025, so a token-price sample is at most about a year long. Treat
+  its Sharpe ratio and CAGR as indicative only.
 * Company icons are simplified vector badges drawn for this terminal, not the issuers' official logos.

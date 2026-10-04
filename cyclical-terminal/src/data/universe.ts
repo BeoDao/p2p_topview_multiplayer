@@ -39,7 +39,7 @@ export const UNIVERSE: CompanyMeta[] = [
     ticker: 'XOM', name: 'Exxon Mobil Corporation', country: 'US', exchange: 'NYSE', sector: 'Energy',
     industry: 'oil_gas', thesis: 'Largest US integrated; 2020 loss year followed by record 2022 earnings.',
     reportingCurrency: 'USD', priceCurrency: 'USD', unit: 'USD_M', regulator: 'SEC', regulatorId: '0000034088',
-    stockCode: 'XOM', fiscalYearEnd: '12-31', driver: 'WTI', tradingViewSymbol: 'NYSE:XOM',
+    stockCode: 'XOM', fiscalYearEnd: '12-31', driver: 'WTI', rwaSymbol: 'XOMx', tradingViewSymbol: 'NYSE:XOM',
     brand: { bg: '#ED1B2D', fg: '#FFFFFF', glyph: 'monogram', mark: 'XOM' }, operatingIncomeBasis: 'pretax',
   },
   {

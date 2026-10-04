@@ -82,7 +82,8 @@ export interface Trade {
   holdingDays: number;
   periods: number;
   costBps: number;
-  syntheticRwa: boolean;
+  /** RWA leg executed with DEX costs but priced off the listed share (the quarterly engine never uses token prices). */
+  rwaPriceProxy: boolean;
   thesis: ThesisValidation;
 }
 
@@ -234,7 +235,7 @@ export function runBacktest(allCompanies: Company[], config: BacktestConfig): Ba
   let peakEquity = capital;
   let benchBase: number | null = null;
   const ppy = PERIODS_PER_YEAR[config.frequency];
-  let syntheticRwaUsed = false;
+  let rwaProxyUsed = false;
 
   const costFor = (c: Company) =>
     config.feeBps + config.slippageBps + (config.onChain && c.rwaSymbol ? config.dexFeeBps + config.dexSlippageBps : 0);
@@ -274,8 +275,8 @@ export function runBacktest(allCompanies: Company[], config: BacktestConfig): Ba
       const exit = tradeSnapshot(s);
       const returnUsd = proceeds / pos.costUsd - 1;
       const returnLocal = exit.priceLocal / pos.entry.priceLocal - 1;
-      const synthetic = config.onChain && c.rwaSymbol != null && pos.entry.date < RWA_PROGRAM_LAUNCH;
-      syntheticRwaUsed ||= synthetic;
+      const proxy = config.onChain && c.rwaSymbol != null;
+      rwaProxyUsed ||= proxy;
       trades.push({
         id: trades.length + 1,
         ticker: t,
@@ -288,7 +289,7 @@ export function runBacktest(allCompanies: Company[], config: BacktestConfig): Ba
         holdingDays: daysBetween(pos.entry.date, d),
         periods: pos.periods,
         costBps: pos.costBps,
-        syntheticRwa: synthetic,
+        rwaPriceProxy: proxy,
         thesis: validateThesis(pos.entry, exit, returnLocal),
       });
       positions.delete(t);
@@ -379,9 +380,10 @@ export function runBacktest(allCompanies: Company[], config: BacktestConfig): Ba
     });
   }
 
-  if (syntheticRwaUsed) {
+  if (rwaProxyUsed) {
     warnings.push(
-      `On-chain mode: tokenized-equity trading on Solana began around ${RWA_PROGRAM_LAUNCH}; earlier RWA legs use the underlying equity price as a synthetic proxy (DEX costs still applied).`,
+      `On-chain mode here is a COST overlay only: every RWA leg is priced off the listed share's quarter-end close plus DEX fee/slippage. ` +
+        `Tokens only exist since ${RWA_PROGRAM_LAUNCH}; use the "RWA Token Backtest" tab for results on actual on-chain token prices.`,
     );
   }
   if (config.frequency === 'quarterly') {

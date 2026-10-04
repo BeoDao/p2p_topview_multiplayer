@@ -15,6 +15,7 @@
     "ingest:sec": "node --experimental-strip-types --no-warnings scripts/ingest-sec.mjs",
     "ingest:dart": "node --experimental-strip-types --no-warnings scripts/ingest-dart.mjs",
     "ingest:edinet": "node --experimental-strip-types --no-warnings scripts/ingest-edinet.mjs",
+    "ingest:rwa": "node --experimental-strip-types --no-warnings scripts/ingest-rwa.mjs",
     "import:prices": "node --experimental-strip-types --no-warnings scripts/import-prices.mjs"
   },
   "dependencies": {
