@@ -12,10 +12,10 @@
     "lint": "eslint .",
     "test": "vitest run",
     "validate:data": "vite-node scripts/validate-data.ts",
-    "ingest:sec": "node scripts/ingest-sec.mjs",
-    "ingest:dart": "node scripts/ingest-dart.mjs",
-    "ingest:edinet": "node scripts/ingest-edinet.mjs",
-    "import:prices": "node scripts/import-prices.mjs"
+    "ingest:sec": "node --experimental-strip-types --no-warnings scripts/ingest-sec.mjs",
+    "ingest:dart": "node --experimental-strip-types --no-warnings scripts/ingest-dart.mjs",
+    "ingest:edinet": "node --experimental-strip-types --no-warnings scripts/ingest-edinet.mjs",
+    "import:prices": "node --experimental-strip-types --no-warnings scripts/import-prices.mjs"
   },
   "dependencies": {
     "html-to-image": "^1.11.13",
